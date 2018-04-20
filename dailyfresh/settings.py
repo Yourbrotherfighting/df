@@ -16,7 +16,8 @@ import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+# 把apps包实现加入到python模块的搜索路径中
+# sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -40,10 +41,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce', # 富文本编辑器
-    'user', # 用户模块
-    'goods', # 商品模块
-    'cart', # 购物车模块
-    'order', # 订单模块
+    'apps.user', # 用户模块
+    'apps.goods', # 商品模块
+    'apps.cart', # 购物车模块
+    'apps.order', # 订单模块
 )
 
 MIDDLEWARE_CLASSES = (
@@ -121,3 +122,35 @@ TINYMCE_DEFAULT_CONFIG = {
     'width': 600,
     'height': 400,
 }
+
+# 发送邮件的类( 默认配置? 所以可以不用配置)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # 邮件服务器域名
+EMAIL_HOST = 'smtp.163.com'
+    # 邮件服务器地址
+EMAIL_PORT = 25
+    # 发送邮件的邮箱 ，根据情况修改
+EMAIL_HOST_USER = 'qx_romantic@163.com'
+    # 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'dq20609'
+    # 其实这个配置是多余的，只是需要在每次发邮件的时候使用，所以当作常量存在这里
+    # 收件人看到的发件人，前面的是名字 ， 注意<> 中的邮箱地址必须和EMAIL_HOST_USER一致
+EMAIL_FROM = 'romantic<qx_romantic@163.com>'
+
+
+# Django的缓存配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/9", # 需要修改成自己的ip
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 配置session存储
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+LOGIN_URL = '/user/login'
